@@ -16,7 +16,6 @@ app.use(morgan('combined'));
 // const customFormat =
 //   ':method :url :status :res[content-length] - :response-time ms';
 app.use((req, res, next) => {
-  console.log('Manish');
   next();
 });
 
