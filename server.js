@@ -6,7 +6,7 @@ console.log(process.env.NODE_ENV);
 
 mongoose
   .connect(
-    `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`
+    `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`,
   )
   .then((con) => {});
 

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+// manish
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
