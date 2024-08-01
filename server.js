@@ -8,7 +8,9 @@ mongoose
   .connect(
     `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`,
   )
-  .then((con) => {});
+  .then((con) => {
+    console.log(con);
+  });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

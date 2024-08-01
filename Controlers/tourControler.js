@@ -80,7 +80,7 @@ exports.getAllTours = async (req, res) => {
     });
   }
 };
-//
+// find by  id
 exports.getTours = async (req, res) => {
   try {
     // console.log(req.query);

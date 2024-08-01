@@ -1,24 +1,25 @@
+const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const fs = require('fs');
 const Tour = require('./../../Models/tourModels');
+//configuring the ddotenv files
 dotenv.config({ path: './config.env' });
 
 mongoose
   .connect(
-    `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`
+    `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`,
   )
   .then((con) => {});
 
 // Read JSON file and write it to
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf8')
+  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf8'),
 );
 
 const importData = async () => {
   try {
     await Tour.create(tours);
-    console.log('data oaded succesfully imported');
+    console.log('data loaded succesfully imported');
   } catch (err) {
     console.log(err.message);
   }
