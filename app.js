@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 // ___________________________________________________________________________________________________________________________
 app.use(morgan('combined'));
 // const customFormat =
-//   ':method :url :status :res[content-length] - :response-time ms';
+//   ':method :url :status :res[content-length]-:response-time ms';
 app.use((req, res, next) => {
   next();
 });

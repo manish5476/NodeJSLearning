@@ -41,33 +41,57 @@ exports.UpdateTours = async (req, res) => {
   }
 };
 
+// /////////////////////////////////////////////////////////////////////////////////////
 exports.getAllTours = async (req, res) => {
   try {
     //filterings
-    const queryObj = { ...req.query };
-    const excludeFields = ['sort', 'limit', 'page', 'fields'];
-    excludeFields.forEach((field) => delete queryObj[field]); // we use this to make the object of requrest ignoring the excluded fields
+    console.log(
+      '------------------------------',
+      req.query,
+      '------------------------------------',
+    );
 
+    //-------------------------------------------------------------------------------------------------------------------
+
+    queryObj = { ...req.query }; // query from the user is comming here
+    // const excludeFields = ['sort', 'limit', 'page', 'fields']; //removing this type of filtering methods which user is sending
+    // excludeFields.forEach((field) => delete queryObj[field]); // we use this to make the object of requrest ignoring the excluded fields
+    // // console.log(queryObj);
     // A => Advance filtering//
     let queryString = JSON.stringify(queryObj);
     queryString = queryString.replace(
       /\b(gte|gt|lte|lt)\b/g,
-      (match) => `$${match}`
+      (match) => `$${match}`,
     );
-    console.log(JSON.parse(queryString));
-    let query = Tour.find(JSON.parse(queryString));
-    // way to filter by difficulty we done this because
-    // if we try it with await directly we can t be able to filtr outmultiple time and it directly give answer
+    // console.log(JSON.parse( queryString)); // way to filter by difficulty we done this because
+    let query = Tour.find(JSON.parse(queryString)); // if we try it with await directly cant be able to filtr outmultiple time and it directly give answer\
+    //-------------------------------------------------------------------------------------------------------------------
 
     // B=> Shorting
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
+      console.log('======', sortBy, '======');
       query = query.sort(sortBy);
     } else {
       query = query.sort('-createdAt');
     }
+    //-------------------------------------------------------------------------------------------------------------------
+    // FIELD LIMITING measn removing fieldss to be visualize we use it wehen we want to hide some ensitive data feommt ehe user
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v');
+    }
+    //-------------------------------------------------------------------------------------------------------------------
+    //pagination and limit fild,,it work by ding like making the query and then we use it to get the data (using ==== > skip(val).limit(limiteddata))
+    const page = req.query.page;
+    if (req.query.page) {
+      query = query.skip();
+    }
+    //-------------------------------------------------------------------------------------------------------------------
 
-    const tours = await query;
+    const tours = await query; //main query we reeturn to the app or mongodb
     res.status(200).json({
       Status: 'success',
       result: tours.length,

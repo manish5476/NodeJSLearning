@@ -1,8 +1,7 @@
-const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const fs = require('fs');
 const Tour = require('./../../Models/tourModels');
-//configuring the ddotenv files
 dotenv.config({ path: './config.env' });
 
 mongoose
@@ -19,7 +18,7 @@ const tours = JSON.parse(
 const importData = async () => {
   try {
     await Tour.create(tours);
-    console.log('data loaded succesfully imported');
+    console.log('data oaded succesfully imported');
   } catch (err) {
     console.log(err.message);
   }
