@@ -48,7 +48,7 @@ exports.getAllTours = async (req, res) => {
     console.log(
       '------------------------------',
       req.query,
-      '------------------------------------',
+      '------------------------------------'
     );
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ exports.getAllTours = async (req, res) => {
     let queryString = JSON.stringify(queryObj);
     queryString = queryString.replace(
       /\b(gte|gt|lte|lt)\b/g,
-      (match) => `$${match}`,
+      (match) => `$${match}`
     );
     // console.log(JSON.parse( queryString)); // way to filter by difficulty we done this because
     let query = Tour.find(JSON.parse(queryString)); // if we try it with await directly cant be able to filtr outmultiple time and it directly give answer\
@@ -85,10 +85,15 @@ exports.getAllTours = async (req, res) => {
     }
     //-------------------------------------------------------------------------------------------------------------------
     //pagination and limit fild,,it work by ding like making the query and then we use it to get the data (using ==== > skip(val).limit(limiteddata))
-    const page = req.query.page;
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 100;
+    const skip = (page - 1) * limit;
     if (req.query.page) {
-      query = query.skip();
+      query = query.skip(skip).limit(limit);
+    } else {
+      query = query.skip(skip).limit(page);
     }
+
     //-------------------------------------------------------------------------------------------------------------------
 
     const tours = await query; //main query we reeturn to the app or mongodb
