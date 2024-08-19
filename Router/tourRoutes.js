@@ -2,9 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const app = express();
-app.use(express.json());//middleware
+app.use(express.json()); //middleware
 
 const tourController = require('./../Controlers/tourControler');
+// while using alisa routes how to configure wnere if we are making use of tweo condition for the sorting purposes
+router
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTours, tourController.getAllTours);
 
 router
   .route('/')

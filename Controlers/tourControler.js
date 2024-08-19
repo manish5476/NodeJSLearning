@@ -2,6 +2,14 @@
 // const router = express.Router();
 
 const Tour = require('./../Models/tourModels');
+// alias
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,difficulty';
+  next();
+};
+
 //create
 exports.createTours = async (req, res) => {
   try {
@@ -76,7 +84,7 @@ exports.getAllTours = async (req, res) => {
       query = query.sort('-createdAt');
     }
     //-------------------------------------------------------------------------------------------------------------------
-    // FIELD LIMITING measn removing fieldss to be visualize we use it wehen we want to hide some ensitive data feommt ehe user
+    // FIELD LIMITING measn removing fieldss to be visualize we use it wehen we want to hide some sensitive data feommt ehe user
     if (req.query.fields) {
       const fields = req.query.fields.split(',').join(' ');
       query = query.select(fields);
@@ -96,7 +104,6 @@ exports.getAllTours = async (req, res) => {
     } else {
       query = query.skip(skip).limit(page);
     }
-
     //-------------------------------------------------------------------------------------------------------------------
 
     const tours = await query; //main query we reeturn to the app or mongodb
