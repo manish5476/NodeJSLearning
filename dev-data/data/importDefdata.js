@@ -6,15 +6,15 @@ dotenv.config({ path: './config.env' });
 
 mongoose
   .connect(
-    `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`,
+    `mongodb+srv://msms5476mm:ms201426@natour-user.awugm7l.mongodb.net/?retryWrites=true&w=majority&appName=Natour-User`
   )
   .then((con) => {});
 
 // Read JSON file and write it to
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf8'),
+  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf8')
 );
-
+// console.log(tours);
 const importData = async () => {
   try {
     await Tour.create(tours);
