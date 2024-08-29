@@ -4,8 +4,8 @@ const router = express.Router();
 const app = express();
 app.use(express.json()); //middleware
 
-const tourController = require('./../Controlers/tourControler');
-// while using alisa routes how to configure wnere if we are making use of tweo condition for the sorting purposes
+const tourController = require('./../Controllers/tourController');
+// while using alisa routes how to configure where if we are making use of two condition for the sorting purposes
 router
   .route('/top-5-cheap')
   .get(tourController.aliasTopTours, tourController.getAllTours);

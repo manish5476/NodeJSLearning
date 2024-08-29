@@ -64,5 +64,6 @@ const tourSchema = new mongoose.Schema({
   startDates: [Date],
 });
 
-const Tour = mongoose.model('Tour', tourSchema); //the second parameter is the fdatavase schema name
+const Tour = mongoose.model('Tour', tourSchema);
+//the second parameter is the fdatavase schema name
 module.exports = Tour;
