@@ -10,7 +10,6 @@ exports.aliasTopTours = (req, res, next) => {
 
 class ApiFunctionality {
   constructor(query, queryString) {
-    // super();
     this.query = query;
     this.queryString = queryString;
   }
