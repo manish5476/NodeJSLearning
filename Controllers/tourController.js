@@ -15,7 +15,7 @@ class ApiFunctionality {
   }
 
   filter() {
-    const queryObj = { ...this.queryString }; // query from the user is coming here
+    const queryObj = { ...this.queryString };
     const excludeFields = ['sort', 'limit', 'page', 'fields']; //removing this type of filtering methods which user is sending
     excludeFields.forEach((field) => delete queryObj[field]); // we use this to make the object of request ignoring the excluded fields
     let queryString = JSON.stringify(queryObj);
