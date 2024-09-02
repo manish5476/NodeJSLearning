@@ -1,5 +1,6 @@
 const { query } = require('express');
 const Tour = require('./../Models/tourModels');
+const ApiFeatures = require('./../Utils/apiFeature');
 // alias
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -8,51 +9,51 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-class ApiFunctionality {
-  constructor(query, queryString) {
-    this.query = query;
-    this.queryString = queryString;
-  }
+// class ApiFunctionality {
+//   constructor(query, queryString) {
+//     this.query = query;
+//     this.queryString = queryString;
+//   }
 
-  filter() {
-    const queryObj = { ...this.queryString };
-    const excludeFields = ['sort', 'limit', 'page', 'fields']; //removing this type of filtering methods which user is sending
-    excludeFields.forEach((field) => delete queryObj[field]); // we use this to make the object of request ignoring the excluded fields
-    let queryString = JSON.stringify(queryObj);
-    queryString = queryString.replace(
-      /\b(gte|gt|lte|lt)\b/g,
-      (match) => `$${match}`
-    );
-    this.query.find(JSON.parse(queryString));
-    return this;
-  }
+//   filter() {
+//     const queryObj = { ...this.queryString };
+//     const excludeFields = ['sort', 'limit', 'page', 'fields']; //removing this type of filtering methods which user is sending
+//     excludeFields.forEach((field) => delete queryObj[field]); // we use this to make the object of request ignoring the excluded fields
+//     let queryString = JSON.stringify(queryObj);
+//     queryString = queryString.replace(
+//       /\b(gte|gt|lte|lt)\b/g,
+//       (match) => `$${match}`
+//     );
+//     this.query.find(JSON.parse(queryString));
+//     return this;
+//   }
 
-  sort() {
-    if (this.queryString.sort) {
-      const sortBy = this.queryString.sort.split(',').join(' ');
-      this.query = this.query.sort(sortBy);
-    } else {
-      this.query = this.query.sort('-createdAt');
-    }
-    return this;
-  }
-  limitFields() {
-    if (this.queryString.fields) {
-      const fields = this.queryString.fields.split(',').join(' ');
-      this.query = this.query.select(fields);
-    } else {
-      this.query = this.query.select('-__v');
-    }
-    return this;
-  }
-  pagination() {
-    const page = this.queryString.page * 1 || 1;
-    const limit = this.queryString.limit * 1 || 100;
-    const skip = (page - 1) * limit;
-    this.query = this.query.skip(skip).limit(limit);
-    return this;
-  }
-}
+//   sort() {
+//     if (this.queryString.sort) {
+//       const sortBy = this.queryString.sort.split(',').join(' ');
+//       this.query = this.query.sort(sortBy);
+//     } else {
+//       this.query = this.query.sort('-createdAt');
+//     }
+//     return this;
+//   }
+//   limitFields() {
+//     if (this.queryString.fields) {
+//       const fields = this.queryString.fields.split(',').join(' ');
+//       this.query = this.query.select(fields);
+//     } else {
+//       this.query = this.query.select('-__v');
+//     }
+//     return this;
+//   }
+//   pagination() {
+//     const page = this.queryString.page * 1 || 1;
+//     const limit = this.queryString.limit * 1 || 100;
+//     const skip = (page - 1) * limit;
+//     this.query = this.query.skip(skip).limit(limit);
+//     return this;
+//   }
+// }
 
 // Get all tours)
 // ALL DATA ///
@@ -61,51 +62,8 @@ exports.getAllTours = async (req, res) => {
     //filtering data
     console.log('----', req.query, '------');
     // queryObj = { ...req.query }; // query from the user is coming here
-    // const excludeFields = ['sort', 'limit', 'page', 'fields']; //removing this type of filtering methods which user is sending
-    // excludeFields.forEach((field) => delete queryObj[field]); // we use this to make the object of request ignoring the excluded fields
-    // // A => Advance filtering data
-    // let queryString = JSON.stringify(queryObj);
-    // queryString = queryString.replace(
-    //   /\b(gte|gt|lte|lt)\b/g,
-    //   (match) => `$${match}`
-    // );
-    // let query = Tour.find(JSON.parse(queryString)); // if we try it with await directly cant be able to filter out multiple time and it directly give answer\
-    //---------------
-    // B=> Shorting
-    // if (req.query.sort) {
-    //   const sortBy = req.query.sort.split(',').join(' ');
-    //   query = query.sort(sortBy);
-    // } else {
-    //   query = query.sort('-createdAt');
-    // }
-    //c=>FIELD LIMITING
-    // FIELD LIMITING mean removing fields to be visualize we use it when we want to hide some sensitive data format the user
-    // if (req.query.fields) {
-    //   const fields = req.query.fields.split(',').join(' ');
-    //   query = query.select(fields);
-    // } else {
-    //   query = query.select('-__v');
-    // }
-    //pagination
-    //------------------------------------------------------------------------------------------------------
-    // pagination and limit fie ld,,it work by ding like making the query and then we use it to get the data
-    //  (using ==== > skip(val).limit(limited data))
-    // const page = req.query.page * 1 || 1;
-    // const limit = req.query.limit * 1 || 100;
-    // const skip = (page - 1) * limit;
-    // query = query.skip(skip).limit(limit);
 
-    // if (req.query.page) {
-    //   const numTours = await Tour.countDocuments();
-    //   if (skip >= numTours)
-    //     throw new Error('this page is not available currently');
-    // }
-    // } else {
-    //   query = query.skip(skip).limit(page);
-    // }
-    //-------------------------------------------------------------------------------------------------------
-    // const tours = await query; //main query we return to the app or mongodb
-    const feature = new ApiFunctionality(Tour.find(), req.query)
+    const feature = new ApiFeatures(Tour.find(), req.query)
       .filter()
       .limitFields()
       .pagination();
