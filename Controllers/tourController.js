@@ -233,6 +233,7 @@ exports.getTourMonthlyReport = async (req, res) => {
         $limit: 12, // limit the result to 12 months
       },
     ]);
+
     res.status(200).json({
       status: 'success',
       message: 'Tour monthly report successfully retrieved',

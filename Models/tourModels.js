@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 // manish
 const tourSchema = new mongoose.Schema({
   name: {
@@ -42,6 +43,7 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     trim: true,
   },
+  slug: String,
   summary: {
     type: String,
     trim: true,
@@ -62,6 +64,15 @@ const tourSchema = new mongoose.Schema({
     default: Date.now(),
   },
   startDates: [Date],
+});
+
+tourSchema.virtual('durationWeek').get(function () {
+  return this.duration / 7;
+});
+
+tourSchema.pre('save', async function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
