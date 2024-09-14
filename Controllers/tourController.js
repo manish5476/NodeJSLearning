@@ -201,6 +201,37 @@ exports.getTourMonthlyReport = async (req, res) => {
       {
         $unwind: '$startDates',
       },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: { $month: '$startDates' },
+          },
+          numberOfTours: { $sum: 1 },
+          name: { $push: '$name' },
+        },
+      },
+      {
+        $addFields: { month: '$_id' },
+      },
+      {
+        $project: {
+          _id: 0,
+        },
+      },
+      {
+        $sort: { numberOfTours: -1 },
+      },
+      {
+        $limit: 12, // limit the result to 12 months
+      },
     ]);
     res.status(200).json({
       status: 'success',
