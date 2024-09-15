@@ -78,16 +78,27 @@ tourSchema.pre('save', function (next) {
 });
 
 tourSchema.post(/^find/, function (docs, next) {
-  console.log(docs);
+  // console.log(docs);
+  next();
 });
 
-tourSchema.post('find', function (next) {
+// tourSchema.post('find', function (docs, next) { // mistake in this line code
+//   this.find({ secretTour: { $ne: true } });
+//   next();
+// });
+// tourSchema.post(/^find/, function (docs, next) {
+//   docs = docs.filter((doc) => !doc.secretTour); // filter out secret tours
+//   next();
+// });
+
+tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   next();
 });
 
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  next();
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
