@@ -230,7 +230,7 @@ exports.getTourMonthlyReport = async (req, res) => {
         $sort: { numberOfTours: -1 },
       },
       {
-        $limit: 12, // limit the result to 12 months
+        $limit: 12,
       },
     ]);
 
